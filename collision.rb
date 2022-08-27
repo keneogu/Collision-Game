@@ -12,6 +12,10 @@ class Box
 		@y_velocity = (-5..5).to_a.sample
 		@color = Color.new('random')
 	end
+
+	def draw
+		Square.new(x: @x, y: @y, size: 15, color: @color)
+	end
 end
 
 $boxes = Array.new(30) {Box.new}
