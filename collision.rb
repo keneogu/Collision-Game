@@ -19,24 +19,38 @@ class Box
 
 	def move
 		@x = (@x + @x_velocity) % Window.width
-		@y =( @y + @y_velocity) % Window.height
+		@y = (@y + @y_velocity) % Window.height
 	end
 
 	def check_for_collisions
-		if @square && collision_detected?
+		if @square && colission_detected?
 			@x_velocity = -@x_velocity
 			@y_velocity = -@y_velocity
 		end
 	end
+
+	def colission_detected?
+		($boxes - Array(self)).any? do |other_box|
+			other_box.included?(@square)
+		end
+	end
+
+	def included?(other_square)
+		@square.contains?(other_square.x1, other_square.y1) ||
+		@square.contains?(other_square.x2, other_square.y2) ||
+		@square.contains?(other_square.x3, other_square.y3) ||
+		@square.contains?(other_square.x4, other_square.y4)
+	end
 end
 
-$boxes = Array.new(30) {Box.new} 
+$boxes = Array.new(40) {Box.new} 
 
 update do
 	clear
 	$boxes.each do |box|
-		box.draw
+		box.check_for_collisions
 		box.move
+		box.draw
 	end
 end
 
