@@ -14,14 +14,30 @@ class Box
 	end
 
 	def draw
-		Square.new(x: @x, y: @y, size: 15, color: @color)
+		@square = Square.new(x: @x, y: @y, size: 15, color: @color)
+	end
+
+	def move
+		@x = (@x + @x_velocity) % Window.width
+		@y =( @y + @y_velocity) % Window.height
+	end
+
+	def check_for_collisions
+		if @square && collision_detected?
+			@x_velocity = -@x_velocity
+			@y_velocity = -@y_velocity
+		end
 	end
 end
 
-$boxes = Array.new(30) {Box.new}
+$boxes = Array.new(30) {Box.new} 
 
 update do
 	clear
+	$boxes.each do |box|
+		box.draw
+		box.move
+	end
 end
 
 show
